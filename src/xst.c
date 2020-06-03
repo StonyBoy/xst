@@ -3676,8 +3676,10 @@ xloadfont(Font *f, FcPattern *pattern)
 		(const FcChar8 *) ascii_printable,
 		strlen(ascii_printable), &extents);
 
-	if (extents.xOff > 1000)
+	if (extents.xOff > 1000) {
+		printf("%s: high extents.xOff: %u\n", __func__, extents.xOff);
 		extents.xOff = 665;  // Hacking
+	}
 
 	f->set = NULL;
 	f->pattern = configured;
@@ -3690,7 +3692,7 @@ xloadfont(Font *f, FcPattern *pattern)
 	f->height = f->ascent + f->descent;
 	f->width = DIVCEIL(extents.xOff, strlen(ascii_printable));
 
-	printf("%s: extents.xOff: %u, strlen: %zu, font width: %u\n", __func__, extents.xOff, strlen(ascii_printable), f->width);
+	printf("%s: adjusted extents.xOff: %u, strlen: %zu, font width: %u\n", __func__, extents.xOff, strlen(ascii_printable), f->width);
 	return 0;
 }
 
